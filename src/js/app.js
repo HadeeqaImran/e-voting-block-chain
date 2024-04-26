@@ -21,11 +21,11 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON("Election.json", function(election) {
+    $.getJSON("DoctorAppointment.json", function(doc_appoint) {
       // Instantiate a new truffle contract from the artifact
-      App.contracts.Election = TruffleContract(election);
+      App.contracts.DoctorAppointment = TruffleContract(doc_appoint);
       // Connect provider to interact with contract
-      App.contracts.Election.setProvider(App.web3Provider);
+      App.contracts.DoctorAppointment.setProvider(App.web3Provider);
 
       App.listenForEvents();
       
@@ -34,7 +34,7 @@ App = {
   },
 
   render: function() {
-    var electionInstance;
+    var docAppointInstance;
     var loader = $("#loader");
     var content = $("#content");
   
@@ -50,42 +50,33 @@ App = {
     });
   
     // Load contract data
-    App.contracts.Election.deployed().then(function(instance) {
-      electionInstance = instance;
-      return electionInstance.candidatesCount();
-    }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
-  
-      var candidatesSelect = $('#candidatesSelect');
-      candidatesSelect.empty();
-  
-      for (var i = 1; i <= candidatesCount; i++) {
-        electionInstance.candidates(i).then(function(candidate) {
-          var id = candidate[0];
-          var name = candidate[1];
-          var voteCount = candidate[2];
-  
-          // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-          candidatesResults.append(candidateTemplate);
-  
-          // Render candidate ballot option
-          var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
-          candidatesSelect.append(candidateOption);
+    App.contracts.DoctorAppointment.deployed().then(function(instance) {
+      docAppointInstance = instance;
+      return docAppointInstance.getDoctorsCount(); // Fetch total number of doctors
+    }).then(function(doctorsCount) {
+      var doctorsResults = $("#doctorsResults");
+      doctorsResults.empty();
+
+      for (var i = 0; i < doctorsCount; i++) {
+        // Fetch details of each doctor
+        docAppointInstance.getDoctor(i).then(function(doctor) {
+          var id = doctor[0];
+          var name = doctor[1];
+          var specialty = doctor[2];
+          var walletAddress = doctor[3];
+
+          // Render doctor details
+          var doctorTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + specialty + "</td><td>" + walletAddress + "</td></tr>";
+          doctorsResults.append(doctorTemplate);
         });
       }
-      return electionInstance.voters(App.account);
-    }).then(function(hasVoted) {
-      // Do not allow a user to vote
-      if(hasVoted) {
-        $('form').hide();
-      }
+      // Hide loader and show content when done fetching and rendering doctors
       loader.hide();
       content.show();
     }).catch(function(error) {
       console.warn(error);
     });
+
   },
 
   // ----------------- Utility Functions -------------------------
@@ -164,6 +155,7 @@ App = {
 
 $(function() {
   $(window).load(function() {
+    consle.log("Yes")
     App.init();
   });
 });
