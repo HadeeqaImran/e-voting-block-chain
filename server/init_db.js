@@ -15,7 +15,7 @@ const createPatientTable = `
   CREATE TABLE IF NOT EXISTS patient (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    age INTEGER,
+    age INTEGER NOT NULL,
     medicalHistory TEXT
   )
 `;
