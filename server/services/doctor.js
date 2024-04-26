@@ -1,18 +1,54 @@
-const db = require('../models/doctor');
+const db = require('../connection'); // Assuming connection.js is in the same directory
 
-// Service to get all doctors
-const getAllDoctors = () => {
+class DoctorService {
+  async getAllDoctors() {
     return new Promise((resolve, reject) => {
-        db.all('SELECT * FROM doctor', (err, rows) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(rows);
-            }
-        });
+      db.all('SELECT * FROM doctor', (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
     });
-};
+  }
 
-module.exports = {
-    getAllDoctors
-};
+  async addDoctor(doctorData) {
+    const { name, specialty } = doctorData;
+    return new Promise((resolve, reject) => {
+      db.run('INSERT INTO doctor (name, specialty) VALUES (?, ?)', [name, specialty], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ message: 'Doctor added successfully!' });
+        }
+      });
+    });
+  }
+  async updateDoctor(doctorId, doctorData) {
+    const { name, specialty } = doctorData;
+    return new Promise((resolve, reject) => {
+      db.run('UPDATE doctor SET name = ?, specialty = ? WHERE id = ?', [name, specialty, doctorId], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ message: 'Doctor updated successfully!' });
+        }
+      });
+    });
+  }
+
+  async deleteDoctor(doctorId) {
+    return new Promise((resolve, reject) => {
+      db.run('DELETE FROM doctor WHERE id = ?', [doctorId], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ message: 'Doctor deleted successfully!' });
+        }
+      });
+    });
+  }
+}
+
+module.exports = new DoctorService(); // Export a single instance
