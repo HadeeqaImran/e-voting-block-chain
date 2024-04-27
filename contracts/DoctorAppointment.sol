@@ -95,6 +95,10 @@ contract DoctorAppointment {
         return doctors.length;
     }
 
+    function getAllDoctors() public view returns (Doctor[] memory) {
+        return doctors;
+    }
+
     // Function to get doctor details by ID
     function getDoctor(uint _id) public view returns (uint, string memory, string memory, address) {
         require(_id < doctors.length, "Doctor does not exist");
