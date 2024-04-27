@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration</title>
+    <link href="./css/doctors_register.css" rel="stylesheet"/>
+    <link href="./css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+    <main>
+        <div class="form-background">
+            <div class="form-foreground">
+                <a href="index.html" class="logo">DateMd</a>
+                <div class="form-title">Doctor Registration</div>
+                <form class="form-content" id="doctorForm" onSubmit="App.registerDoctor(); return false;">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required><br><br>
+                    <label for="specialty">Specialty:</label>
+                    <input type="text" id="specialty" name="specialty" required><br><br>
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

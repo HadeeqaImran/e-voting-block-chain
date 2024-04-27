@@ -6,6 +6,7 @@ const db = new sqlite3.Database('./database.db'); // Replace with your filename
 const createDoctorTable = `
   CREATE TABLE IF NOT EXISTS doctor (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    
     name TEXT NOT NULL,
     specialty TEXT NOT NULL
   )

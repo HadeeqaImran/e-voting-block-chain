@@ -1,0 +1,107 @@
+main{
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--blue);
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+.header-section{
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+    margin: 30px;
+    align-items: center;
+    }
+
+.title{
+    font-size: 2em;
+    font-weight: 700;
+}
+
+.header-right{
+    width: 30%;
+    justify-content: space-around;
+}
+
+.underline-hover {
+    position: relative;
+    display: inline-block;
+    color: white;
+    opacity: 0.7;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.underline-hover::before {
+    text-decoration: none;
+    text-decoration-color: none;
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255); /* Change this to the desired underline color */
+    color: white;
+    transition: width 0.3s ease;
+}
+
+.underline-hover:hover::before {
+    text-decoration: none;
+    text-decoration-color: none;
+    text-decoration: none;
+    width: 100%;
+}
+
+/*Center of Page*/
+.center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 160px;
+}
+
+.center-text{
+    font-size: 3em;
+    font-weight: 750;
+    color: white;
+}
+.center-buttons{
+    display: flex;
+    justify-content: space-around;
+    width: 30%;
+    margin-top: 50px;
+    font-size: 1.5em;
+}
+
+.center-btn {
+    text-decoration: none;
+    color: white;
+    opacity: 0.7;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    padding: 10px 20px;
+    border-radius: 10px 30px;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, border-radius 0.2s ease-in-out; /* Apply transition to properties changing on hover */
+}
+
+.center-btn:hover {
+    text-decoration: none;
+    color: white;
+    opacity: 1; /* Change opacity on hover */
+    transform: scale(1.1); /* Scale on hover */
+    border-radius: 30px 10px; /* Change border radius on hover */
+}
