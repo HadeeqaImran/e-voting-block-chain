@@ -42,7 +42,7 @@ contract DoctorAppointment {
     }
 
     // Function to register a new doctor (only admin)
-    function registerDoctor(string memory _name, string memory _specialty) public {
+    function registerDoctor(string memory _name, string memory _specialty) public onlyAdmin {
         // Add the doctor to the array of doctors
         doctors.push(Doctor(doctors.length, _name, _specialty, msg.sender));
         emit DoctorRegistered(doctors.length, _name, _specialty);

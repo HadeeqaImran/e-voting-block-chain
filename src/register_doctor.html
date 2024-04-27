@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Doctor Registration</h1>
-    <form id="doctorForm">
+    <form id="doctorForm" onSubmit="App.registerDoctor(); return false;">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br><br>
         <label for="specialty">Specialty:</label>
@@ -19,29 +19,9 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
-    <script>
-        $(document).ready(function() {
-    $('#doctorForm').submit(async function(event) {
-        event.preventDefault(); // Prevent default form submission behavior
-        // Retrieve form data
-        var _name = $("#name").val();
-        var _specialty = $("#specialty").val();
-        try {
-            // Call the registerDoctor function from your DApps app.js
-            await App.registerDoctor(_name, _specialty);
-
-            // Handle success response
-            console.log("Doctor registered and stored in the blockchain and database successfully!");
-            alert("Doctor registered and stored in the blockchain and database successfully!");
-        } catch (error) {
-            // Handle error response
-            console.error("Failed to register doctor:", error);
-            alert("Failed to register doctor" + error);
-        }
-    });
-});
-    </script>
 </body>
 </html>

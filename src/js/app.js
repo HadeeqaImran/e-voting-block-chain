@@ -1,3 +1,4 @@
+//Do something about listening to events
 App = {
   web3Provider: null,
   contracts: {},
@@ -27,9 +28,9 @@ App = {
       // Connect provider to interact with contract
       App.contracts.DoctorAppointment.setProvider(App.web3Provider);
 
-      App.listenForDoctorRegistrationEvents();
-      App.listenForAppointmentBookingEvents();
-      
+      // might hve to remove
+      //App.listenForDoctorRegistrationEvents();
+      //App.listenForAppointmentBookingEvents();
       return App.render();
     });
   },
@@ -38,7 +39,6 @@ App = {
     var docAppointInstance;
     var loader = $("#loader");
     var content = $("#content");
-  
     loader.show();
     content.hide();
   
@@ -81,36 +81,26 @@ App = {
   },
 
   // ----------------- Utility Functions -------------------------
-  registerDoctor: async function(name, specialty) {
-    var doctorInstance;
-    alert("Doctor register function entered");
-    return App.contracts.DoctorAppointment.deployed().then(function(instance) {
-        doctorInstance = instance;
-        // Call the registerDoctor function in the smart contract
-        alert("Entering Contract");
-        return doctorInstance.registerDoctor(name, specialty, { from: App.account });
-    }).then(function(result) {  
-        // Once the doctor is successfully registered on the blockchain, send a request to the backend API to store the doctor in the database
-        alert("Ajax reached");
-        return $.ajax({
-            type: "POST",
-            url: "/api/doctors",
-            contentType: "application/json",
-            data: JSON.stringify({
-                name: name,
-                specialty: specialty
-            })
-        });
-    }).then(function(response) {
-        console.log("Doctor stored in the database successfully:", response);
-        return response; // Return the response from the backend API
+  registerDoctor: async function() {
+    var name = $('#name').val();
+    var specialty = $('#specialty').val();
+    App.contracts.DoctorAppointment.deployed().then(function(instance) {
+      return instance.registerDoctor(name, specialty, { from: App.account });
+    }).then(function(result) {
+      // Send a request to the backend API to store the doctor in the database
+      var response = $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8000/api/doctors",
+        contentType: "application/json",
+        data: JSON.stringify({
+            name: name,
+            specialty: specialty
+        })
+      });
     }).catch(function(err) {
-        // Handle error
-        alert(err)
-        console.error("Failed to register doctor:", err);
-        throw err;
+      console.error(err);
     });
-},
+  },
 
   // Display Doctors' List
   displayDoctorsList: function() {
