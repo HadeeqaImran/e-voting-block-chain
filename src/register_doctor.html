@@ -23,34 +23,25 @@
     <script src="js/app.js"></script>
     <script>
         $(document).ready(function() {
-            $('#doctorForm').submit(async function(event) {
-                event.preventDefault(); // Prevent default form submission behavior
+    $('#doctorForm').submit(async function(event) {
+        event.preventDefault(); // Prevent default form submission behavior
+        // Retrieve form data
+        var _name = $("#name").val();
+        var _specialty = $("#specialty").val();
+        try {
+            // Call the registerDoctor function from your DApps app.js
+            await App.registerDoctor(_name, _specialty);
 
-                // Retrieve form data
-                var _name = $("#name").val();
-                var _specialty = $("#specialty").val();
-                try {
-            // Make AJAX request to store doctor in the database
-            const response = await $.ajax({
-                type: "POST",
-                url: "http://localhost:8000/api/doctors",
-                contentType: "application/json", // Set Content-Type header to JSON
-                data: JSON.stringify({  // Serialize form data to JSON
-                    name: _name,
-                    specialty: _specialty
-                })
-            });
-
-                    // Handle success response
-                    console.log("Doctor stored in the database successfully:", response);
-                    alert("Doctor registered and stored in the database successfully!");
-                } catch (error) {
-                    // Handle error response
-                    console.error("Failed to store doctor in the database:", error);
-                    alert("Failed to store doctor in the database");
-                }
-            });
-        });
+            // Handle success response
+            console.log("Doctor registered and stored in the blockchain and database successfully!");
+            alert("Doctor registered and stored in the blockchain and database successfully!");
+        } catch (error) {
+            // Handle error response
+            console.error("Failed to register doctor:", error);
+            alert("Failed to register doctor" + error);
+        }
+    });
+});
     </script>
 </body>
 </html>

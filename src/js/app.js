@@ -81,38 +81,36 @@ App = {
   },
 
   // ----------------- Utility Functions -------------------------
-  // Function to handle doctor registration form submission
-  registerDoctor: function(name, specialty) {
+  registerDoctor: async function(name, specialty) {
     var doctorInstance;
-    console.log("Doctor register function entered");
-    App.contracts.DoctorAppointment.deployed().then(function(instance) {
-      doctorInstance = instance;
-      // Call the registerDoctor function in the smart contract
-      return doctorInstance.registerDoctor(name, specialty, { from: App.account });
+    alert("Doctor register function entered");
+    return App.contracts.DoctorAppointment.deployed().then(function(instance) {
+        doctorInstance = instance;
+        // Call the registerDoctor function in the smart contract
+        alert("Entering Contract");
+        return doctorInstance.registerDoctor(name, specialty, { from: App.account });
     }).then(function(result) {  
         // Once the doctor is successfully registered on the blockchain, send a request to the backend API to store the doctor in the database
-        $.ajax({
-          type: "POST",
-          url: "/api/doctors",
-          data: {
-              name: name,
-              specialty: specialty
-          },
-          success: function(response) {
-              console.log("Doctor stored in the database successfully:", response);
-              alert("Doctor registered and stored in the database successfully!");
-          },
-          error: function(xhr, status, error) {
-              console.error("Failed to store doctor in the database:", error);
-              alert("Failed to store doctor in the database");
-          }
-      });
+        alert("Ajax reached");
+        return $.ajax({
+            type: "POST",
+            url: "/api/doctors",
+            contentType: "application/json",
+            data: JSON.stringify({
+                name: name,
+                specialty: specialty
+            })
+        });
+    }).then(function(response) {
+        console.log("Doctor stored in the database successfully:", response);
+        return response; // Return the response from the backend API
     }).catch(function(err) {
-      // Handle error
-      console.error(err);
-      alert("Failed to register doctor");
+        // Handle error
+        alert(err)
+        console.error("Failed to register doctor:", err);
+        throw err;
     });
-  },
+},
 
   // Display Doctors' List
   displayDoctorsList: function() {
@@ -181,6 +179,8 @@ App = {
   }
 };
 
-$(window).on('load', function() {
-  App.init();
+$(function() {
+  $(window).load(function() {
+    App.init();
+  });
 });
