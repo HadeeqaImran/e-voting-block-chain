@@ -25,6 +25,7 @@ class DoctorService {
       });
     });
   }
+  
   async updateDoctor(doctorId, doctorData) {
     const { name, specialty } = doctorData;
     return new Promise((resolve, reject) => {

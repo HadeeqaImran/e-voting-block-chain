@@ -16,7 +16,8 @@
     </form>
     <a href="list_doctors.html">Display</a>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
@@ -29,15 +30,16 @@
                 var _name = $("#name").val();
                 var _specialty = $("#specialty").val();
                 try {
-                    // Make AJAX request to store doctor in the database
-                    const response = await $.ajax({
-                        type: "POST",
-                        url: "http://localhost:8000/api/doctors",
-                        data: {
-                            name: _name,
-                            specialty: _specialty
-                        }
-                    });
+            // Make AJAX request to store doctor in the database
+            const response = await $.ajax({
+                type: "POST",
+                url: "http://localhost:8000/api/doctors",
+                contentType: "application/json", // Set Content-Type header to JSON
+                data: JSON.stringify({  // Serialize form data to JSON
+                    name: _name,
+                    specialty: _specialty
+                })
+            });
 
                     // Handle success response
                     console.log("Doctor stored in the database successfully:", response);
@@ -45,7 +47,7 @@
                 } catch (error) {
                     // Handle error response
                     console.error("Failed to store doctor in the database:", error);
-                    alert("Failed to store doctor in the database" + name);
+                    alert("Failed to store doctor in the database");
                 }
             });
         });

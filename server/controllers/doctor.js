@@ -13,6 +13,7 @@ exports.getDoctors = async (req, res) => {
 exports.addDoctor = async (req, res) => {
   try {
     const doctorData = req.body;
+    console.log(doctorData);
     const result = await DoctorService.addDoctor(doctorData);
     res.json(result);
   } catch (error) {

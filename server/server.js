@@ -11,9 +11,7 @@ const port = process.env.PORT || 8000; // Set your preferred port
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors({
-    origin: 'http://127.0.0.1:3000'
-})); // Enable CORS for all routes
+app.use(cors()); // Enable CORS for all routes
 
 // API endpoints for doctors
 app.get('/api/doctors', doctorController.getDoctors);
@@ -32,5 +30,6 @@ app.delete('/api/patients/:id', patientController.deletePatient); // Assuming ID
 //   console.error(err.stack);
 //   res.status(500).json({ message: 'Internal server error' });
 // });
+
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
