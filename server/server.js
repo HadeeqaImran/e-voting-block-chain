@@ -5,6 +5,7 @@ const connection = require('./connection'); // Assuming connection.js is in the 
 
 const doctorController = require('./controllers/doctor');
 const patientController = require('./controllers/patient');
+const appointmentController = require('./controllers/appointment');
 
 const app = express();
 const port = process.env.PORT || 8000; // Set your preferred port
@@ -24,6 +25,14 @@ app.get('/api/patients', patientController.getPatients);
 app.post('/api/patients', patientController.addPatient);
 app.put('/api/patients/:id', patientController.updatePatient); // Assuming ID is in URL path
 app.delete('/api/patients/:id', patientController.deletePatient); // Assuming ID is in URL path
+
+
+// API endpoints for patients
+app.get('/api/appointments', appointmentController.getAppointments);
+app.post('/api/appointments', appointmentController.addAppointment);
+app.put('/api/appointments/:id', appointmentController.updateAppointment); // Assuming ID is in URL path
+app.delete('/api/appointments/:id', appointmentController.deleteAppointment); // Assuming ID is in URL path
+
 
 // Error handling middleware (optional)
 // app.use((err, req, res, next) => {
