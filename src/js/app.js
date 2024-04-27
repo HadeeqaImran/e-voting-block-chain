@@ -8,14 +8,14 @@ App = {
   },
 
   initWeb3: function() {
-    if (typeof web3 !== 'undefined') {
-      // If a web3 instance is already provided by Meta Mask.
-      App.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider);
+    if (typeof window.ethereum !== 'undefined') {
+        // If MetaMask is installed
+        App.web3Provider = window.ethereum;
+        web3 = new Web3(window.ethereum);
     } else {
-      // Specify default instance if no web3 instance provided
-      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
-      web3 = new Web3(App.web3Provider);
+        // Specify default instance if no web3 instance provided
+        App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+        web3 = new Web3(App.web3Provider);
     }
     return App.initContract();
   },
@@ -27,7 +27,8 @@ App = {
       // Connect provider to interact with contract
       App.contracts.DoctorAppointment.setProvider(App.web3Provider);
 
-      App.listenForEvents();
+      App.listenForDoctorRegistrationEvents();
+      App.listenForAppointmentBookingEvents();
       
       return App.render();
     });
@@ -88,10 +89,24 @@ App = {
       doctorInstance = instance;
       // Call the registerDoctor function in the smart contract
       return doctorInstance.registerDoctor(name, specialty, { from: App.account });
-    }).then(function(result) {
-      // Handle success
-      console.log("Doctor registered successfully:", result);
-      alert("Doctor registered successfully!");
+    }).then(function(result) {  
+        // Once the doctor is successfully registered on the blockchain, send a request to the backend API to store the doctor in the database
+        $.ajax({
+          type: "POST",
+          url: "/api/doctors",
+          data: {
+              name: name,
+              specialty: specialty
+          },
+          success: function(response) {
+              console.log("Doctor stored in the database successfully:", response);
+              alert("Doctor registered and stored in the database successfully!");
+          },
+          error: function(xhr, status, error) {
+              console.error("Failed to store doctor in the database:", error);
+              alert("Failed to store doctor in the database");
+          }
+      });
     }).catch(function(err) {
       // Handle error
       console.error(err);
@@ -139,9 +154,22 @@ App = {
     });
   },
 
-  listenForEvents: function() {
-    App.contracts.Election.deployed().then(function(instance) {
-      instance.votedEvent({}, {
+  listenForDoctorRegistrationEvents: function() {
+    App.contracts.DoctorAppointment.deployed().then(function(instance) {
+      instance.DoctorRegistered({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error, event) {
+        console.log("event triggered", event)
+        // Reload when a new vote is recorded
+        App.render();
+      });
+    });
+  },
+
+  listenForAppointmentBokingEvents: function() {
+    App.contracts.DoctorAppointment.deployed().then(function(instance) {
+      instance.AppointmentBooked({}, {
         fromBlock: 0,
         toBlock: 'latest'
       }).watch(function(error, event) {
@@ -153,9 +181,6 @@ App = {
   }
 };
 
-$(function() {
-  $(window).load(function() {
-    consle.log("Yes")
-    App.init();
-  });
+$(window).on('load', function() {
+  App.init();
 });

@@ -28,6 +28,7 @@ contract DoctorAppointment {
 
     // Event for appointment booking
     event AppointmentBooked(uint indexed doctorId, uint indexed patientId, uint slot);
+    event DoctorRegistered(uint id, string name, string speciality);
 
     // Modifier to restrict access to the admin
     modifier onlyAdmin() {
@@ -44,6 +45,7 @@ contract DoctorAppointment {
     function registerDoctor(string memory _name, string memory _specialty) public onlyAdmin {
         // Add the doctor to the array of doctors
         doctors.push(Doctor(doctors.length, _name, _specialty, msg.sender));
+        emit DoctorRegistered(doctors.length, _name, _specialty);
     }
 
     // Function to register a new patient
@@ -93,10 +95,6 @@ contract DoctorAppointment {
     // Function to get the total number of doctors
     function getDoctorsCount() public view returns (uint) {
         return doctors.length;
-    }
-
-    function getAllDoctors() public view returns (Doctor[] memory) {
-        return doctors;
     }
 
     // Function to get doctor details by ID
