@@ -12,7 +12,7 @@ exports.getDoctors = async (req, res) => {
 
 exports.getDoctorByWallet = async (req, res) => {
   try {
-      const wallet_address = req.params.wallet_address;
+      const wallet_address = req.params.wallet_address.toLowerCase();
       const doctor = await DoctorService.getDoctorByWallet(wallet_address);
       res.json(doctor);
   } catch (error) {

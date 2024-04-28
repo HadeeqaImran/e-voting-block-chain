@@ -37,9 +37,9 @@ exports.getPatientById = async (req, res) => {
 
 exports.getPatientByWallet = async (req, res) => {
   try {
-      const wallet = req.params.wallet;
-      const doctor = await PatientService.getPatientByWallet(wallet);
-      res.json(doctor);
+      const wallet_address = req.params.wallet_address.toLowerCase();
+      const patient = await PatientService.getPatientByWallet(wallet_address);
+      res.json(patient);
   } catch (error) {
       console.error('Error retrieving patient:', error);
       res.status(500).json({ error: 'Error retrieving patient' });

@@ -38,9 +38,9 @@ class PatientService {
     });
   }
 
-  async getPatientByWallet(wallet) {
+  async getPatientByWallet(wallet_address) {
     return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM patient WHERE wallet_address = ?', [wallet], (err, row) => {
+      db.all('SELECT * FROM patient WHERE wallet_address = ?', [wallet_address], (err, row) => {
         if (err) {
             reject(err);
         } else {

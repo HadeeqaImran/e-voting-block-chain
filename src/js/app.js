@@ -155,7 +155,7 @@ App = {
             name: name,
             age: age,
             gender: gender,
-            wallet_address: "Yes",
+            wallet_address: App.account.toLowerCase(),
             medicalHistory: "None"
         })
       });

@@ -50,7 +50,7 @@ contract DoctorAppointment {
     }
 
     // Function to register a new patient
-    function registerPatient(string memory _name) public returns (address){
+    function registerPatient(string memory _name) public {
         // Ensure the sender is not already registered as a patient
         require(!isPatient(msg.sender), "Already registered as a patient");
 

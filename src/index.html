@@ -31,7 +31,7 @@
       <div class="center">
           <div class="center-text">Schedule an Appointment</div>
           <div class="center-buttons">
-              <a href="#" class="center-btn">Patient Portal</a>
+              <a href="patient_register.html" class="center-btn">Patient Portal</a>
               <a href="#" class="center-btn">Schedule Appointment</a>
           </div>
       </div>
@@ -57,14 +57,15 @@
                     const patientData = await patientResponse.json();
                     const doctorData = await doctorResponse.json();
                     
-                    if (doctorData.length === 0) {
+                    if (doctorData.length !== 0) {
                         // Doctor profile is called
+                        console.log(doctorData)
                         window.location.href = `http://127.0.0.1:3000/doctor_profile.html?account=${connectedAccount}&name=${doctorData[0].name}&specialty=${doctorData[0].specialty}`;
-                    } else if (patientData.length === 0) {
+                    } else if (patientData.length !== 0) {
                         // Patient profile is called
-                        window.location.href = `http://127.0.0.1:3000/profile.html?account=${connectedAccount}&name=${encodeURIComponent(patientData.name)}&age=${encodeURIComponent(patientData.age)}&gender=${encodeURIComponent(patientData.gender)}`;
+                        window.location.href = `http://127.0.0.1:3000/patient_profile.html?account=${connectedAccount}&name=${patientData[0].name}&age=${patientData[0].age}&gender=${patientData[0].gender}`;
                     } else {
-                        console.error('Account not found in the system.');
+                        console.error('Account not found in the system.' + connectedAccount);
                     }
                 })
             } else {
@@ -87,54 +88,7 @@
         }
     });
 </script>
-    <!-- <div class="container" style="width: 650px;">
-      <div class="row">
-        <div class="col-lg-12">
-          <h1 class="text-center">Election Results</h1>
-          <div>
-            <button onclick="redirectToDoctorRegistration()">
-            </button>
-          </div>
-          <hr/>
-          <br/>
-          <div id="loader">
-            <p class="text-center">Loading...</p>
-          </div>
-          <div id="content" style="display: none;">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Votes</th>
-                </tr>
-              </thead>
-              <tbody id="candidatesResults">
-              </tbody>
-            </table>
-            <hr/>
-            <form onSubmit="App.castVote(); return false;">
-              <div class="form-group">
-                <label for="candidatesSelect">Select Candidate</label>
-                <select class="form-control" id="candidatesSelect">
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Vote</button>
-              <hr />
-            </form>
-            <p id="accountAddress" class="text-center"></p>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <script>
-      function redirectToDoctorRegistration() {
-          // Redirect to the doctor registration HTML page
-          window.location.href = "register_doctor.html";
-      }
-    </script> -->
-    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

@@ -24,7 +24,7 @@ app.delete('/api/doctors/:id', doctorController.deleteDoctor); // Assuming ID is
 
 // API endpoints for patients
 app.get('/api/patients', patientController.getPatients);
-app.get('/api/patients/:wallet', patientController.getPatientByWallet)
+app.get('/api/patients/:wallet_address', patientController.getPatientByWallet)
 app.post('/api/patients', patientController.addPatient);
 app.put('/api/patients/:id', patientController.updatePatient); // Assuming ID is in URL path
 app.delete('/api/patients/:id', patientController.deletePatient); // Assuming ID is in URL path

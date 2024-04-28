@@ -7,26 +7,29 @@
     <link href="./css/profiles.css" rel="stylesheet"/>
 </head>
 <body>
-    <h1>Doctor Profile</h1>
+    <h1>Patient Profile</h1>
     <div class="profile-background">
-    <div class="profile-info">
-        <h2>Profile Information</h2>
-        <p><strong>Account:</strong> <span id="account"></span></p>
-        <p><strong>Name:</strong> <span id="name"></span></p>
-        <p><strong>Specialty:</strong> <span id="specialty"></span></p>
-    </div>
+        <div class="profile-info">
+            <h2>Profile Information</h2>
+            <p><strong>Account:</strong> <span id="account"></span></p>
+            <p><strong>Name:</strong> <span id="name"></span></p>
+            <p><strong>Age:</strong> <span id="age"></span></p>
+            <p><strong>Gender:</strong> <span id="gender"></span></p>
+        </div>
 </div>
     <script>
         // Get query parameters from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const account = urlParams.get('account');
         const name = urlParams.get('name'); // Updated to 'name' instead of 'doctorname'
-        const specialty = urlParams.get('specialty');
+        const age = urlParams.get('age');
+        const gender = urlParams.get('gender');
     
         // Display query parameter values in the HTML elements
         document.getElementById('account').textContent = account;
         document.getElementById('name').textContent = name;
-        document.getElementById('specialty').textContent = specialty;
+        document.getElementById('age').textContent = age;
+        document.getElementById('gender').textContent = gender;
     </script>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -84,3 +84,7 @@ select{
     font-size: 1em;
     color: black
 }
+
+option{
+    color: black
+}
