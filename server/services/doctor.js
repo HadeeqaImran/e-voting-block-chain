@@ -13,6 +13,17 @@ class DoctorService {
     });
   }
 
+  async getDoctorByWallet(wallet) {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM doctor WHERE wallet_address = ?', [wallet], (err, row) => {
+        if (err) {
+            reject(err);
+        } else {
+            resolve(row);
+        }
+      });
+    });
+  }
   async addDoctor(doctorData) {
     const { name, specialty } = doctorData;
     return new Promise((resolve, reject) => {

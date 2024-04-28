@@ -21,6 +21,7 @@
           </div>
           <div class="header-right header-section">
               <a class="underline-hover nav-right">Home</a>
+              <div id="profileIcon" class="underline-hover nav-right">Profile</div>
               <a href="./doctors_register.html" class="underline-hover nav-right">Register</a>
               <a class="underline-hover nav-right">About</a>
               <a class="underline-hover nav-right">Schedule</a>
@@ -35,6 +36,58 @@
           </div>
       </div>
     </main>
+
+<script>
+    // Function to handle click event on the profile icon
+    function handleProfileClick(event) {
+        event.preventDefault(); // Prevent default link behavior
+        
+        try {
+            // Check if MetaMask is installed
+            if (typeof window.ethereum !== 'undefined') {
+                // Request account access if not already granted
+                window.ethereum.request({ method: 'eth_requestAccounts' }).then(async function(accounts) {
+                    // Get the first account in the array (assuming MetaMask provides at least one account)
+                    const connectedAccount = accounts[0];
+
+                    // Make a request to your backend API to retrieve name and specialty
+                    const doctorResponse = await fetch(`http://127.0.0.1:8000/api/doctors/${connectedAccount}`);
+                    const patientResponse = await fetch(`http://127.0.0.1:8000/api/patients/${connectedAccount}`);
+
+                    const patientData = await patientResponse.json();
+                    const doctorData = await doctorResponse.json();
+                    
+                    if (doctorData.name !== '') {
+                        // Doctor profile is called
+                        window.location.href = `http://127.0.0.1:3000/profile.html?account=${connectedAccount}&name=${encodeURIComponent(name)}&specialty=${encodeURIComponent(specialty)}`;
+                    } else if (patientData.name !== '') {
+                        // Patient profile is called
+                        window.location.href = `http://127.0.0.1:3000/profile.html?account=${connectedAccount}&name=${encodeURIComponent(patientData.name)}&age=${encodeURIComponent(patientData.age)}&gender=${encodeURIComponent(patientData.gender)}`;
+                    } else {
+                        // Alert if account not found in the system
+                        alert('Account not found in the system.');
+                    }
+                })
+            } else {
+                // MetaMask is not installed or not detected
+                console.error('MetaMask is not installed.');
+                // Handle the case where MetaMask is not available
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle other errors
+        }
+    }
+
+    // Add event listener to run the script after DOM content is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listener to the "Profile" link
+        const profileIcon = document.getElementById('profileIcon');
+        if (profileIcon) {
+            profileIcon.addEventListener('click', handleProfileClick);
+        }
+    });
+</script>
     <!-- <div class="container" style="width: 650px;">
       <div class="row">
         <div class="col-lg-12">

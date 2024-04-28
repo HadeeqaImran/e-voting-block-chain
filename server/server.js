@@ -16,9 +16,11 @@ app.use(cors()); // Enable CORS for all routes
 
 // API endpoints for doctors
 app.get('/api/doctors', doctorController.getDoctors);
+app.get('/api/doctors/:wallet', doctorController.getDoctorByWallet)
 app.post('/api/doctors', doctorController.addDoctor);
 app.put('/api/doctors/:id', doctorController.updateDoctor); // Assuming ID is in URL path
 app.delete('/api/doctors/:id', doctorController.deleteDoctor); // Assuming ID is in URL path
+
 
 // API endpoints for patients
 app.get('/api/patients', patientController.getPatients);

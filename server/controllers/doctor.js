@@ -10,6 +10,16 @@ exports.getDoctors = async (req, res) => {
   }
 };
 
+exports.getDoctorByWallet = async (req, res) => {
+  try {
+      const wallet = req.params.wallet;
+      const doctor = await doctorService.getDoctorByWallet(wallet);
+      res.json(doctor);
+  } catch (error) {
+      console.error('Error retrieving doctor:', error);
+      res.status(500).json({ error: 'Error retrieving doctor' });
+  }
+}
 exports.addDoctor = async (req, res) => {
   try {
     const doctorData = req.body;

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .profile-info {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Doctor Profile</h1>
+
+    <div class="profile-info">
+        <h2>Profile Information</h2>
+        <p><strong>Account:</strong> <span id="account"></span></p>
+        <p><strong>Name:</strong> <span id="name"></span></p>
+        <p><strong>Specialty:</strong> <span id="specialty"></span></p>
+    </div>
+
+    <script>
+        // Get query parameters from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const account = urlParams.get('account');
+        const name = urlParams.get('name');
+        const specialty = urlParams.get('specialty');
+
+        // Display query parameter values in the HTML elements
+        document.getElementById('account').textContent = account;
+        document.getElementById('name').textContent = name;
+        document.getElementById('specialty').textContent = specialty;
+    </script>
+</body>
+</html>
