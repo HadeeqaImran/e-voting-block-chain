@@ -14,9 +14,9 @@ class PatientService {
   }
 
   async addPatient(patientData) {
-    const { name, age, medicalHistory } = patientData;
+    const { name, age, gender, wallet_address, medicalHistory } = patientData;
     return new Promise((resolve, reject) => {
-      db.run('INSERT INTO patient (name, age, medicalHistory) VALUES (?, ?, ?)', [name, age, medicalHistory], (err) => {
+      db.run('INSERT INTO patient (name, age, gender, wallet_address, medicalHistory) VALUES (?, ?, ?, ?, ?)', [name, age, gender, wallet_address,  medicalHistory], (err) => {
         if (err) {
           reject(err);
         } else {
@@ -39,9 +39,9 @@ class PatientService {
   }
 
   async updatePatient(patientId, patientData) {
-    const { name, age, medicalHistory } = patientData;
+    const { name, age, gender, wallet_address, medicalHistory } = patientData;
     return new Promise((resolve, reject) => {
-      db.run('UPDATE patient SET name = ?, age = ?, medicalHistory = ? WHERE id = ?', [name, age, medicalHistory, patientId], (err) => {
+      db.run('UPDATE patient SET name = ?, age = ?, gender = ?, wallet_address = ?, medicalHistory = ? WHERE id = ?', [name, age, gender, wallet_address, medicalHistory, patientId], (err) => {
         if (err) {
           reject(err);
         } else {

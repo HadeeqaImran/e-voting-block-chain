@@ -78,3 +78,9 @@ button:hover {
     transform: scale(1.1); /* Scale on hover */
     border-radius: 16px 4px; /* Change border radius on hover */
 }
+
+select{
+    padding: 7px;
+    font-size: 1em;
+    color: black
+}

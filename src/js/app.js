@@ -80,7 +80,10 @@ App = {
 
   },
 
-  // ----------------- Utility Functions -------------------------
+  // ---------------------------------------- Utility Functions --------------------------------------
+  /* -------------------------------------------------------------------------------------------------
+  ------------------------------------------------ Doctor --------------------------------------------
+  ---------------------------------------------------------------------------------------------------*/
   registerDoctor: async function() {
     var name = $('#name').val();
     var specialty = $('#specialty').val();
@@ -129,19 +132,39 @@ App = {
     });
   },
 
-  castVote: function() {
-    var candidateId = $('#candidatesSelect').val();
-    App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: App.account });
+
+/* -------------------------------------------------------------------------------------------------
+  ----------------------------------------------- Patient ------------------------------------------
+  --------------------------------------------------------------------------------------------------*/
+  registerPatient: async function() {
+    var name = $('#name').val();
+    var age = $('#age').val();
+    var gender = $('#gender').val()
+    App.contracts.DoctorAppointment.deployed().then(function(instance) {
+      return instance.registerPatient(name, { from: App.account });
     }).then(function(result) {
-      // Wait for votes to update
-      $("#content").hide();
-      $("#loader").show();
+      alert("Sending request: " + result)
+      // Send a request to the backend API to store the doctor in the database
+      var response = $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8000/api/patients",
+        contentType: "application/json",
+        data: JSON.stringify({
+            name: name,
+            age: age,
+            gender: gender,
+            wallet_address: "Yes",
+            medicalHistory: "None"
+        })
+      });
     }).catch(function(err) {
-      console.error(err);
+      alert("Error: " + err.data)
     });
   },
-
+/* --------------------------------------------------------------------------------------------------
+  ------------------------------------------------ Events -------------------------------------------
+  ---------------------------------------------------------------------------------------------------*/
+ 
   listenForDoctorRegistrationEvents: function() {
     App.contracts.DoctorAppointment.deployed().then(function(instance) {
       instance.DoctorRegistered({}, {

@@ -16,6 +16,8 @@ const createPatientTable = `
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     age INTEGER NOT NULL,
+    gender TEXT NOT NULL,
+    wallet_address VARCHAR(42) NOT NULL,
     medicalHistory TEXT
   )
 `;

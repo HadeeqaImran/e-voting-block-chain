@@ -29,6 +29,7 @@ contract DoctorAppointment {
     // Event for appointment booking
     event AppointmentBooked(uint indexed doctorId, uint indexed patientId, uint slot);
     event DoctorRegistered(uint id, string name, string speciality);
+    event PatientRergistered(uint id, string name);
 
     // Modifier to restrict access to the admin
     modifier onlyAdmin() {
@@ -49,12 +50,13 @@ contract DoctorAppointment {
     }
 
     // Function to register a new patient
-    function registerPatient(string memory _name) public {
+    function registerPatient(string memory _name) public returns (address){
         // Ensure the sender is not already registered as a patient
         require(!isPatient(msg.sender), "Already registered as a patient");
 
         // Add the patient to the array of patients
         patients.push(Patient(patients.length, _name, msg.sender));
+        emit PatientRergistered(patients.length, _name);
     }
 
     // Function to check if an address is registered as a patient
