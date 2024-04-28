@@ -7,7 +7,8 @@ const createDoctorTable = `
   CREATE TABLE IF NOT EXISTS doctor (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    specialty TEXT NOT NULL
+    specialty TEXT NOT NULL,
+    wallet_address VARCHAR(42) NOT NULL
   )
 `;
 

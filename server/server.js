@@ -16,7 +16,7 @@ app.use(cors()); // Enable CORS for all routes
 
 // API endpoints for doctors
 app.get('/api/doctors', doctorController.getDoctors);
-app.get('/api/doctors/:wallet', doctorController.getDoctorByWallet)
+app.get('/api/doctors/:wallet_address', doctorController.getDoctorByWallet)
 app.post('/api/doctors', doctorController.addDoctor);
 app.put('/api/doctors/:id', doctorController.updateDoctor); // Assuming ID is in URL path
 app.delete('/api/doctors/:id', doctorController.deleteDoctor); // Assuming ID is in URL path
@@ -24,6 +24,7 @@ app.delete('/api/doctors/:id', doctorController.deleteDoctor); // Assuming ID is
 
 // API endpoints for patients
 app.get('/api/patients', patientController.getPatients);
+app.get('/api/patients/:wallet', patientController.getPatientByWallet)
 app.post('/api/patients', patientController.addPatient);
 app.put('/api/patients/:id', patientController.updatePatient); // Assuming ID is in URL path
 app.delete('/api/patients/:id', patientController.deletePatient); // Assuming ID is in URL path

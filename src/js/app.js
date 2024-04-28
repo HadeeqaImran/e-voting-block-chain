@@ -87,6 +87,7 @@ App = {
   registerDoctor: async function() {
     var name = $('#name').val();
     var specialty = $('#specialty').val();
+    var wallet_address = $('#wallet_address').val();
     App.contracts.DoctorAppointment.deployed().then(function(instance) {
       return instance.registerDoctor(name, specialty, { from: App.account });
     }).then(function(result) {
@@ -97,7 +98,8 @@ App = {
         contentType: "application/json",
         data: JSON.stringify({
             name: name,
-            specialty: specialty
+            specialty: specialty,
+            wallet_address: wallet_address.toLowerCase(),
         })
       });
     }).catch(function(err) {

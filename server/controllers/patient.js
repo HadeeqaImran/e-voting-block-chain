@@ -35,6 +35,17 @@ exports.getPatientById = async (req, res) => {
   }
 };
 
+exports.getPatientByWallet = async (req, res) => {
+  try {
+      const wallet = req.params.wallet;
+      const doctor = await PatientService.getPatientByWallet(wallet);
+      res.json(doctor);
+  } catch (error) {
+      console.error('Error retrieving patient:', error);
+      res.status(500).json({ error: 'Error retrieving patient' });
+  }
+};
+
 exports.updatePatient = async (req, res) => {
   try {
     const patientId = parseInt(req.params.id); // Assuming ID is in URL params

@@ -32,13 +32,21 @@
         // Get query parameters from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const account = urlParams.get('account');
-        const name = urlParams.get('name');
+        const name = urlParams.get('name'); // Updated to 'name' instead of 'doctorname'
         const specialty = urlParams.get('specialty');
-
+    
         // Display query parameter values in the HTML elements
         document.getElementById('account').textContent = account;
         document.getElementById('name').textContent = name;
         document.getElementById('specialty').textContent = specialty;
     </script>
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/web3.min.js"></script>
+        <script src="js/truffle-contract.js"></script>
+        <script src="js/app.js"></script>
 </body>
 </html>

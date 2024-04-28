@@ -38,6 +38,18 @@ class PatientService {
     });
   }
 
+  async getPatientByWallet(wallet) {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM patient WHERE wallet_address = ?', [wallet], (err, row) => {
+        if (err) {
+            reject(err);
+        } else {
+            resolve(row);
+        }
+      });
+    });
+  }
+  
   async updatePatient(patientId, patientData) {
     const { name, age, gender, wallet_address, medicalHistory } = patientData;
     return new Promise((resolve, reject) => {

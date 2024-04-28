@@ -57,15 +57,14 @@
                     const patientData = await patientResponse.json();
                     const doctorData = await doctorResponse.json();
                     
-                    if (doctorData.name !== '') {
+                    if (doctorData.length === 0) {
                         // Doctor profile is called
-                        window.location.href = `http://127.0.0.1:3000/profile.html?account=${connectedAccount}&name=${encodeURIComponent(name)}&specialty=${encodeURIComponent(specialty)}`;
-                    } else if (patientData.name !== '') {
+                        window.location.href = `http://127.0.0.1:3000/doctor_profile.html?account=${connectedAccount}&name=${doctorData[0].name}&specialty=${doctorData[0].specialty}`;
+                    } else if (patientData.length === 0) {
                         // Patient profile is called
                         window.location.href = `http://127.0.0.1:3000/profile.html?account=${connectedAccount}&name=${encodeURIComponent(patientData.name)}&age=${encodeURIComponent(patientData.age)}&gender=${encodeURIComponent(patientData.gender)}`;
                     } else {
-                        // Alert if account not found in the system
-                        alert('Account not found in the system.');
+                        console.error('Account not found in the system.');
                     }
                 })
             } else {

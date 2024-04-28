@@ -13,9 +13,9 @@ class DoctorService {
     });
   }
 
-  async getDoctorByWallet(wallet) {
+  async getDoctorByWallet(wallet_address) {
     return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM doctor WHERE wallet_address = ?', [wallet], (err, row) => {
+      db.all('SELECT * FROM doctor WHERE wallet_address = ?', [wallet_address], (err, row) => {
         if (err) {
             reject(err);
         } else {
@@ -24,10 +24,11 @@ class DoctorService {
       });
     });
   }
+
   async addDoctor(doctorData) {
-    const { name, specialty } = doctorData;
+    const { name, specialty, wallet_address } = doctorData;
     return new Promise((resolve, reject) => {
-      db.run('INSERT INTO doctor (name, specialty) VALUES (?, ?)', [name, specialty], (err) => {
+      db.run('INSERT INTO doctor (name, specialty, wallet_address) VALUES (?, ?, ?)', [name, specialty, wallet_address], (err) => {
         if (err) {
           reject(err);
         } else {
@@ -38,9 +39,9 @@ class DoctorService {
   }
   
   async updateDoctor(doctorId, doctorData) {
-    const { name, specialty } = doctorData;
+    const { name, specialty, wallet_address } = doctorData;
     return new Promise((resolve, reject) => {
-      db.run('UPDATE doctor SET name = ?, specialty = ? WHERE id = ?', [name, specialty, doctorId], (err) => {
+      db.run('UPDATE doctor SET name = ?, specialty = ?, wallet_address = ? WHERE id = ?', [name, specialty, wallet_address, doctorId], (err) => {
         if (err) {
           reject(err);
         } else {
