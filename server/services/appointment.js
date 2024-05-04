@@ -13,10 +13,10 @@ class AppointmentService {
     });
   }
 
-  async addAppointment(appointmentData) {
+  async addAvailableAppointment(appointmentData) {
     const { doctorID, patientID, startTime, date } = appointmentData;
     return new Promise((resolve, reject) => {
-      db.run('INSERT INTO appointment (doctorID, patientID, startTime, date) VALUES (?, ?, ?, ?)', [doctorID, patientID, startTime, date], (err) => {
+      db.run('INSERT INTO appointment (doctorID, patientID, startTime, date) VALUES (?, ?, ?, ?)', [doctorID, -1, startTime, date], (err) => {
         if (err) {
           reject(err);
         } else {
@@ -36,6 +36,18 @@ class AppointmentService {
           resolve({ message: 'Appointment updated successfully!' });
         }
       });
+    });
+  }
+
+  async updateAppointmentWithPatientID(appointmentId, patientID) {
+    return new Promise((resolve, reject) => {
+        db.run('UPDATE appointment SET patientID = ? WHERE id = ?', [patientID, appointmentId], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve({ message: 'Appointment updated successfully!' });
+            }
+        });
     });
   }
 

@@ -24,7 +24,6 @@
               <div id="profileIcon" class="underline-hover nav-right">Profile</div>
               <a href="./doctors_register.html" class="underline-hover nav-right">Register</a>
               <a class="underline-hover nav-right">About</a>
-              <a class="underline-hover nav-right">Schedule</a>
           </div>
       </div>
 
@@ -32,7 +31,7 @@
           <div class="center-text">Schedule an Appointment</div>
           <div class="center-buttons">
               <a href="patient_register.html" class="center-btn">Patient Portal</a>
-              <a href="#" class="center-btn">Schedule Appointment</a>
+              <div id="scheduleIcon" class="center-btn">Schedule Appointment</div>
           </div>
       </div>
     </main>
@@ -64,6 +63,47 @@
                     } else if (patientData.length !== 0) {
                         // Patient profile is called
                         window.location.href = `http://127.0.0.1:3000/patient_profile.html?account=${connectedAccount}&name=${patientData[0].name}&age=${patientData[0].age}&gender=${patientData[0].gender}`;
+                    } else {
+                        console.error('Account not found in the system.' + connectedAccount);
+                    }
+                })
+            } else {
+                // MetaMask is not installed or not detected
+                console.error('MetaMask is not installed.');
+                // Handle the case where MetaMask is not available
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle other errors
+        }
+    }
+
+    function handleScheduleClick(event) {
+        event.preventDefault(); // Prevent default link behavior
+        
+        try {
+            // Check if MetaMask is installed
+            if (typeof window.ethereum !== 'undefined') {
+                // Request account access if not already granted
+                window.ethereum.request({ method: 'eth_requestAccounts' }).then(async function(accounts) {
+                    // Get the first account in the array (assuming MetaMask provides at least one account)
+                    const connectedAccount = accounts[0];
+
+                    // Make a request to your backend API to retrieve name and specialty
+                    const doctorResponse = await fetch(`http://127.0.0.1:8000/api/doctors/${connectedAccount}`);
+                    const patientResponse = await fetch(`http://127.0.0.1:8000/api/patients/${connectedAccount}`);
+
+                    const patientData = await patientResponse.json();
+                    const doctorData = await doctorResponse.json();
+                    const error = "Doctor Profile"
+
+                    if (doctorData.length !== 0) {
+                        // Doctor profile is called
+                        console.log(doctorData)
+                        window.location.href = `http://127.0.0.1:3000/error.html?error=${error}`;
+                    } else if (patientData.length !== 0) {
+                        // Patient profile is called
+                        window.location.href = `http://127.0.0.1:3000/doctors_list.html`;
                     } else {
                         console.error('Account not found in the system.' + connectedAccount);
                     }

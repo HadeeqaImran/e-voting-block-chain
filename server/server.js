@@ -30,9 +30,10 @@ app.put('/api/patients/:id', patientController.updatePatient); // Assuming ID is
 app.delete('/api/patients/:id', patientController.deletePatient); // Assuming ID is in URL path
 
 
-// API endpoints for patients
+// API endpoints for appointments
 app.get('/api/appointments', appointmentController.getAppointments);
 app.post('/api/appointments', appointmentController.addAppointment);
+app.patch('/api/appointments/:id', appointmentController.updateAppointmentWithPatientID)
 app.put('/api/appointments/:id', appointmentController.updateAppointment); // Assuming ID is in URL path
 app.delete('/api/appointments/:id', appointmentController.deleteAppointment); // Assuming ID is in URL path
 
