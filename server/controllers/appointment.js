@@ -10,6 +10,27 @@ exports.getAppointments = async (req, res) => {
   }
 };
 
+exports.getAvailableAppointmentsByDoctorID = async (req, res) => {
+  try {
+    const doctorID = req.params.doctorid;
+    const appointments = await AppointmentService.getAvailableAppointmentsByDoctorID(doctorID);
+    res.json(appointments);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error retrieving appointments' });
+  }
+};
+
+exports.getAppointmentsByID = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const appointments = await AppointmentService.getAppointmentsByID(id);
+    res.json(appointments);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving appointments' });
+  }
+};
+
 exports.addAppointment = async (req, res) => {
   try {
     const appointmentData = req.body;

@@ -16,7 +16,7 @@
         <p><strong>Specialty:</strong> <span id="specialty"></span></p>
     </div>
 </div>
-<div class="add-availabiity"><div class="center-btn">Add Available Slot</div></div>
+<div class="add-availabiity"><div class="center-btn" id="addSlotBtn">Add Available Slot</div></div>
     <script>
         // Get query parameters from the URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -30,6 +30,14 @@
         document.getElementById('specialty').textContent = specialty;
     </script>
 
+    <script>
+        // Add click event listener to the button
+        document.getElementById('addSlotBtn').addEventListener('click', function() {
+            const id = urlParams.get('id');
+            // Redirect to the doctor_add_availability.html page with the doctor ID parameter
+            window.location.href = `doctor_add_availability.html?doctorId=${id}`;
+        });
+    </script>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->

@@ -1,0 +1,92 @@
+body{
+    padding: 20px; 
+}
+.black{
+    color: black;
+}
+select{
+padding: 7px;
+font-size: 1em;
+color: black
+}
+
+option{
+color: black
+}
+.form-title{
+color: var(--blue);
+font-size: 1.5em;
+font-weight: 800;
+margin-top: 10px;
+letter-spacing: -1px;
+}
+
+.form-background{
+rotate: -5deg;
+background-image: linear-gradient(to right, var(--gradient-left), var(--gradient-right));
+border-radius: 5px;    
+}
+
+.form-foreground{
+padding: 50px;
+rotate: 5deg;
+border-radius: 5px;
+background-color: white;
+opacity:0.9;
+}
+
+.logo{
+text-decoration: none;
+color: var(--blue);
+font-size: 2em;
+font-weight: 1000;
+margin-block: 300px;
+}
+
+button{
+border: 2px solid var(--blue);
+background: none;
+padding: 5px 10px;
+cursor: pointer; 
+}
+
+.form-content{
+display: flex;
+flex-direction: column;
+margin-block: 20px;
+font-size: large;
+}
+
+label{
+margin-bottom: 2px;
+color: black;
+}
+
+input{
+padding: 7px;
+font-size: 1em;
+color: black
+}
+
+button {
+    text-decoration: none;
+    color: white;
+    opacity: 1;
+    border: 2px solid var(--blue);
+    background-color: var(--blue);
+    padding: 10px 20px;
+    border-radius: 4px 16px;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, border-radius 0.2s ease-in-out; /* Apply transition to properties changing on hover */
+}
+
+button:hover {
+    opacity: 1; /* Change opacity on hover */
+    transform: scale(1.1); /* Scale on hover */
+    border-radius: 16px 4px; /* Change border radius on hover */
+}
+
+.form-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

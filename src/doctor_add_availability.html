@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Appointment Slots</title>
+    <link href="./css/styles.css" rel="stylesheet" />
+    <link href="./css/tables.css" rel="stylesheet" />
+    <link href="./css/doctor_add_avail.css" rel="stylesheet" />
+</head>
+<body>
+
+<h1>Available Doctor Appointment Slots</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Remove Slot</th>
+        </tr>
+    </thead>
+    <tbody id="appointmentSlots">
+        <!-- Data will be dynamically added here -->
+    </tbody>
+</table>
+
+<h2>Enter New Appointment Slot</h2>
+
+<div class="form-container">
+<div class="form-background">
+    <div class="form-foreground">
+            <form id="appointmentForm">
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required><br><br>
+                
+                <label for="time">Time:</label>
+                <input type="time" id="time" name="time" required><br><br>
+                
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // Function to display available appointment slots
+    function displayAppointmentSlots(slots) {
+        const appointmentSlots = document.getElementById('appointmentSlots');
+        appointmentSlots.innerHTML = '';
+
+        slots.forEach(slot => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${slot.id}</td>
+                <td>${slot.date}</td>
+                <td>${slot.startTime}</td>
+                <td><button class="center-btn" onclick="removeAppointment(${slot.id})">Remove</button></td>
+            `;
+            appointmentSlots.appendChild(row);
+        });
+    }
+
+    function removeAppointment(id) {
+    fetch(`http://127.0.0.1:8000/api/appointments/${id}`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            // If deletion is successful, fetch and display updated appointment slots
+            return fetch('http://127.0.0.1:8000/api/appointments/available/${id}');
+        } else {
+            throw new Error('Failed to delete appointment');
+        }
+    })
+    .then(response => response.json())
+    .then(slots => {
+        // Display updated appointment slots
+        window.location.reload()
+        displayAppointmentSlots(slots);
+    })
+    .catch(error => {
+        console.error('Error deleting appointment:', error);
+        alert('Error deleting appointment:', error);
+    });
+    }
+
+    // Fetch appointment slots data from API
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('doctorId');
+    fetch(`http://127.0.0.1:8000/api/appointments/available/${id}`)
+        .then(response => response.json())
+        .then(slots => {
+            // Display appointment slots
+            displayAppointmentSlots(slots);
+        })
+        .catch(error => {
+            console.error('Error fetching appointment slots:', error);
+            alert('Error fetching appointment slots:', error);
+    });
+
+    // Form submission event listener
+    document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    
+    // Get form data
+    const id = urlParams.get('doctorId');
+    const patientID = -1;
+    const formData = new FormData(this);
+    const date = formData.get('date');
+    const time = formData.get('time');
+    
+    fetch('http://127.0.0.1:8000/api/appointments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            doctorID: id,
+            patientID: -1,
+            startTime: time,
+            date: date,
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(response => {
+        // On success, display response
+        alert('Response:', response);
+    })
+    .catch(error => {
+        // On error, display error message
+        console.error('Error:', error);
+        alert('Error:', error);
+    });
+});
+</script>
+
+</body>
+</html>

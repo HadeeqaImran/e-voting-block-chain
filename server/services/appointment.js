@@ -13,10 +13,36 @@ class AppointmentService {
     });
   }
 
+  async getAvailableAppointmentsByDoctorID(doctorId) {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM appointment WHERE doctorID = ?', [doctorId], (err, rows) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve(rows);
+          }
+      });
+    });
+  }
+
+  async getAppointmentsByID(id) {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM appointment WHERE id = ? and patientID = ?', [id, -1], (err, rows) => {
+          if (err) {
+            console.log(err)
+              reject(err);
+          } else {
+            console.log(err)
+              resolve(rows);
+          }
+      });
+    });
+  }
+
   async addAvailableAppointment(appointmentData) {
     const { doctorID, patientID, startTime, date } = appointmentData;
     return new Promise((resolve, reject) => {
-      db.run('INSERT INTO appointment (doctorID, patientID, startTime, date) VALUES (?, ?, ?, ?)', [doctorID, -1, startTime, date], (err) => {
+      db.run('INSERT INTO appointment (doctorID, patientID, startTime, date) VALUES (?, ?, ?, ?)', [doctorID, patientID, startTime, date], (err) => {
         if (err) {
           reject(err);
         } else {

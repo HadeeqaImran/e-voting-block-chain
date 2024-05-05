@@ -1,0 +1,56 @@
+*{
+    --blue: #00081f;
+    --gradient-left: #668d85;
+    --gradient-right: #a2b8fc;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background-color: var(--blue);
+    display: flex;
+    height: 60vh;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 800;
+    font-size: 4em;
+}
+
+.center-btn {
+    text-decoration: none;
+    color: white;
+    opacity: 0.7;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    padding: 10px 20px;
+    border-radius: 10px 30px;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, border-radius 0.2s ease-in-out; /* Apply transition to properties changing on hover */
+}
+
+.center-btn:hover {
+    text-decoration: none;
+    color: white;
+    opacity: 1; /* Change opacity on hover */
+    transform: scale(1.1); /* Scale on hover */
+    border-radius: 30px 10px; /* Change border radius on hover */
+}
+
+.space{
+    margin-top: 40px;
+}
+
+a{
+    text-decoration: none;
+    color: white
+}
+a:hover{
+    text-decoration: none;
+    color: white;
+}

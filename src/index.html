@@ -31,7 +31,7 @@
           <div class="center-text">Schedule an Appointment</div>
           <div class="center-buttons">
               <a href="patient_register.html" class="center-btn">Patient Portal</a>
-              <div id="scheduleIcon" class="center-btn">Schedule Appointment</div>
+              <a href="doctors_list.html" id="scheduleIcon" class="center-btn">Schedule Appointment</a>
           </div>
       </div>
     </main>
@@ -59,7 +59,7 @@
                     if (doctorData.length !== 0) {
                         // Doctor profile is called
                         console.log(doctorData)
-                        window.location.href = `http://127.0.0.1:3000/doctor_profile.html?account=${connectedAccount}&name=${doctorData[0].name}&specialty=${doctorData[0].specialty}`;
+                        window.location.href = `http://127.0.0.1:3000/doctor_profile.html?account=${connectedAccount}&id=${doctorData[0].id}&name=${doctorData[0].name}&specialty=${doctorData[0].specialty}`;
                     } else if (patientData.length !== 0) {
                         // Patient profile is called
                         window.location.href = `http://127.0.0.1:3000/patient_profile.html?account=${connectedAccount}&name=${patientData[0].name}&age=${patientData[0].age}&gender=${patientData[0].gender}`;
@@ -98,12 +98,10 @@
                     const error = "Doctor Profile"
 
                     if (doctorData.length !== 0) {
-                        // Doctor profile is called
-                        console.log(doctorData)
                         window.location.href = `http://127.0.0.1:3000/error.html?error=${error}`;
                     } else if (patientData.length !== 0) {
                         // Patient profile is called
-                        window.location.href = `http://127.0.0.1:3000/doctors_list.html`;
+                        window.location.href = `http://127.0.0.1:3000/doctors_list.html?id=${patientData[0].id}&account=${connectedAccount}&name=${patientData[0].name}&age=${patientData[0].age}&gender=${patientData[0].gender}`;
                     } else {
                         console.error('Account not found in the system.' + connectedAccount);
                     }
@@ -125,6 +123,9 @@
         const profileIcon = document.getElementById('profileIcon');
         if (profileIcon) {
             profileIcon.addEventListener('click', handleProfileClick);
+        }
+        if (scheduleIcon) {
+            scheduleIcon.addEventListener('click', handleScheduleClick);
         }
     });
 </script>

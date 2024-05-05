@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/styles.css" rel="stylesheet"/>
+    <link href="./css/tables.css" rel="stylesheet"/>
     <title>Doctors List</title>
 </head>
 <body>
 
 <h1>Doctors List</h1>
-
-<table id="doctorsTable" border="1">
+<div class="table-container">
+<table id="doctorsTable">
     <thead>
         <tr>
             <th>Name</th>
@@ -21,7 +23,7 @@
         <!-- Data will be dynamically added here -->
     </tbody>
 </table>
-
+</div>
 <script>
     // Fetch data from the API
     fetch('http://127.0.0.1:8000/api/doctors')
@@ -39,7 +41,7 @@
 
                 nameCell.textContent = doctor.name;
                 specialtyCell.textContent = doctor.specialty;
-                linkCell.innerHTML = `<a href="http://127.0.0.1:3000/doctor_schedule_view.html?account=${doctor.wallet_address}&name=${doctor.name}&specialty=${doctor.specialty}">Schedule</a>`
+                linkCell.innerHTML = `<div class="center-btn"><a href="http://127.0.0.1:3000/doctor_schedule_view.html?id=${doctor.id}&account=${doctor.wallet_address}&name=${doctor.name}&specialty=${doctor.specialty}">Schedule</a></div>`
 
             });
         })
