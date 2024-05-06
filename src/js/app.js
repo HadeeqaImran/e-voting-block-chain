@@ -163,6 +163,38 @@ App = {
       alert("Error: " + err.data)
     });
   },
+
+
+
+/* -------------------------------------------------------------------------------------------------
+  ----------------------------------------------- Patient ------------------------------------------
+  --------------------------------------------------------------------------------------------------*/
+
+    bookAppointment: async function(slotId, pid) {
+      App.contracts.DoctorAppointment.deployed().then(function(instance) {
+        return instance.bookAppointment(name, { from: App.account });
+      }).then(function(result) {
+        alert("Sending request: " + result)
+        // Send a request to the backend API to store the doctor in the database
+        var response = $.ajax({
+          type: "POST",
+          url: "http://127.0.0.1:8000/api/patients",
+          contentType: "application/json",
+          data: JSON.stringify({
+              name: name,
+              age: age,
+              gender: gender,
+              wallet_address: App.account.toLowerCase(),
+              medicalHistory: "None"
+          })
+        });
+      }).catch(function(err) {
+        alert("Error: " + err.data)
+      });
+    },
+  
+  
+    }
 /* --------------------------------------------------------------------------------------------------
   ------------------------------------------------ Events -------------------------------------------
   ---------------------------------------------------------------------------------------------------*/

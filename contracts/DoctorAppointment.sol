@@ -10,7 +10,7 @@ contract DoctorAppointment {
         string name;
         string specialty;
         address walletAddress; // Ethereum address of the doctor
-        mapping(uint => bool) availability; // Mapping for available slots
+        mapping(string => bool) availability; // Mapping for available slots
     }
 
     // Structure to represent a patient
@@ -27,7 +27,7 @@ contract DoctorAppointment {
     Patient[] public patients;
 
     // Event for appointment booking
-    event AppointmentBooked(uint indexed doctorId, uint indexed patientId, uint slot);
+    event AppointmentBooked(uint indexed doctorId, uint indexed patientId, string timestamp);
     event DoctorRegistered(uint id, string name, string speciality);
     event PatientRergistered(uint id, string name);
 
@@ -69,28 +69,28 @@ contract DoctorAppointment {
         return false;
     }
 
-    // Function for doctors to set their availability
-    function setAvailability(uint _doctorId, uint _slot, bool _available) public {
-        // Ensure the doctor exists
-        require(_doctorId < doctors.length, "Doctor does not exist");
+    // // Function for doctors to set their availability
+    // function setAvailability(uint _doctorId, uint _slot, bool _available) public {
+    //     // Ensure the doctor exists
+    //     require(_doctorId < doctors.length, "Doctor does not exist");
 
-        // Update the availability for the specified slot
-        doctors[_doctorId].availability[_slot] = _available;
-    }
+    //     // Update the availability for the specified slot
+    //     doctors[_doctorId].availability[_slot] = _available;
+    // }
 
     // Function for patients to book an appointment
-    function bookAppointment(uint _doctorId, uint _slot) public {
+    function bookAppointment(uint _doctorId, string memory _timestamp) public {
         // Ensure the doctor exists
         require(_doctorId < doctors.length, "Doctor does not exist");
 
         // Ensure the slot is available
-        require(doctors[_doctorId].availability[_slot], "Slot not available");
+        require(doctors[_doctorId].availability[_timestamp], "Slot not available");
 
         // Emit an event indicating the booking
-        emit AppointmentBooked(_doctorId, patients.length - 1, _slot);
+        emit AppointmentBooked(_doctorId, patients.length - 1, _timestamp);
 
         // Mark the slot as unavailable after booking
-        doctors[_doctorId].availability[_slot] = false;
+        doctors[_doctorId].availability[_timestamp] = false;
     }
 
     // List all registered Doctors ----------------------

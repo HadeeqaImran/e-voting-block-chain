@@ -40,6 +40,7 @@
         const account = urlParams.get('account');
         const name = urlParams.get('name'); // Updated to 'name' instead of 'doctorname'
         const specialty = urlParams.get('specialty');
+        const pid = urlParams.get('pid');
 
         // Display query parameter values in the HTML elements
         document.getElementById('account').textContent = account;
@@ -57,7 +58,7 @@
                 row.innerHTML = `
                     <td>${slot.date}</td>
                     <td>${slot.startTime}</td>
-                    <td><button class="center-btn" onclick="bookSlot(${slot.id})">Book Slot</button></td>
+                    <td><button class="center-btn" onclick="onSubmit="App.bookAppointment(slot.id, pid); return false;bookSlot(${slot.id})">Book Slot</button></td>
                 `;
                 appointmentSlots.appendChild(row);
             });

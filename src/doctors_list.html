@@ -25,13 +25,15 @@
 </table>
 </div>
 <script>
+    
     // Fetch data from the API
     fetch('http://127.0.0.1:8000/api/doctors')
         .then(response => response.json())
         .then(data => {
             const doctorsTable = document.getElementById('doctorsTable');
             const tbody = doctorsTable.getElementsByTagName('tbody')[0];
-
+            const urlParams = new URLSearchParams(window.location.search);
+            const pid = urlParams.get('id');
             // Loop through the data and add rows to the table
             data.forEach(doctor => {
                 const row = tbody.insertRow();
@@ -41,7 +43,7 @@
 
                 nameCell.textContent = doctor.name;
                 specialtyCell.textContent = doctor.specialty;
-                linkCell.innerHTML = `<div class="center-btn"><a href="http://127.0.0.1:3000/doctor_schedule_view.html?id=${doctor.id}&account=${doctor.wallet_address}&name=${doctor.name}&specialty=${doctor.specialty}">Schedule</a></div>`
+                linkCell.innerHTML = `<div class="center-btn"><a href="http://127.0.0.1:3000/doctor_schedule_view.html?pid=${pid}&id=${doctor.id}&account=${doctor.wallet_address}&name=${doctor.name}&specialty=${doctor.specialty}">Schedule</a></div>`
 
             });
         })
