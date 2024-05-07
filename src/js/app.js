@@ -28,9 +28,6 @@ App = {
       // Connect provider to interact with contract
       App.contracts.DoctorAppointment.setProvider(App.web3Provider);
 
-      // might hve to remove
-      //App.listenForDoctorRegistrationEvents();
-      //App.listenForAppointmentBookingEvents();
       return App.render();
     });
   },
@@ -88,22 +85,29 @@ App = {
     var name = $('#name').val();
     var specialty = $('#specialty').val();
     var wallet_address = $('#wallet_address').val();
-    App.contracts.DoctorAppointment.deployed().then(function(instance) {
-      return instance.registerDoctor(name, specialty, wallet_address, { from: App.account });
-    }).then(function(result) {
-      // Send a request to the backend API to store the doctor in the database
-      var response = $.ajax({
-        type: "POST",
-        url: "http://127.0.0.1:8000/api/doctors",
-        contentType: "application/json",
-        data: JSON.stringify({
-            name: name,
-            specialty: specialty,
-            wallet_address: wallet_address.toLowerCase(),
+    var maxId;
+    fetch('http://localhost:8000/api/doctor')
+    .then(response => response.json())
+    .then(result => {
+        maxId = result.id;
+        App.contracts.DoctorAppointment.deployed().then(function(instance) {
+          return instance.registerDoctor(maxId+1, name, specialty, wallet_address, { from: App.account });
+        }).then(function(result) {
+          // Send a request to the backend API to store the doctor in the database
+          var response = $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8000/api/doctors",
+            contentType: "application/json",
+            data: JSON.stringify({
+                name: name,
+                specialty: specialty,
+                wallet_address: wallet_address.toLowerCase(),
+            })
+          });
         })
-      });
-    }).catch(function(err) {
-      console.error(err);
+    }).catch(error => {
+        // Handle fetch error
+        console.error('Error fetching maximum doctor id:', error);
     });
   },
 
@@ -142,8 +146,12 @@ App = {
     var name = $('#name').val();
     var age = $('#age').val();
     var gender = $('#gender').val()
-    App.contracts.DoctorAppointment.deployed().then(function(instance) {
-      return instance.registerPatient(name, { from: App.account });
+    fetch('http://localhost:8000/api/doctor')
+    .then(response => response.json())
+    .then(result => {
+        maxId = result.id;
+        App.contracts.DoctorAppointment.deployed().then(function(instance) {
+      return instance.registerPatient(maxId + 1, name, { from: App.account });
     }).then(function(result) {
       alert("Sending request: " + result)
       // Send a request to the backend API to store the doctor in the database
@@ -159,7 +167,8 @@ App = {
             medicalHistory: "None"
         })
       });
-    }).catch(function(err) {
+    })
+  }).catch(function(err) {
       alert("Error: " + err.data)
     });
   },
@@ -170,11 +179,11 @@ App = {
   ----------------------------------------------- Patient ------------------------------------------
   --------------------------------------------------------------------------------------------------*/
 
-  bookAppointment: async function(date, time, docAccount) {
+  bookAppointment: async function(date, time, id) {
       App.contracts.DoctorAppointment.deployed().then(function(instance) {
         const dateTimeString = date + " " + time;
-        alert(docAccount)
-        return instance.bookAppointment(docAccount, dateTimeString, { from: App.account });
+        alert (dateTimeString + id)
+        return instance.bookAppointment(id, dateTimeString, { from: App.account });
       }).then(async function(result) {
         alert("Sending request: " + result)
         try {

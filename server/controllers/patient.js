@@ -68,3 +68,13 @@ exports.deletePatient = async (req, res) => {
     res.status(500).json({ message: 'Error deleting patient' });
   }
 };
+
+
+exports.maxIdFinder = async (req, res) => {
+  try {
+    const result = await PatientService.maxIdFinder();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting patient' +  result});
+  }
+};

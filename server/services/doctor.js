@@ -62,6 +62,18 @@ class DoctorService {
       });
     });
   }
+
+  async maxIdFinder() {
+    return new Promise((resolve, reject) => {
+      db.get('SELECT MAX(id) as id FROM doctor', (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+  }
 }
 
 module.exports = new DoctorService(); // Export a single instance

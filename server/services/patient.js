@@ -74,6 +74,18 @@ class PatientService {
       });
     });
   }
+
+  async maxIdFinder() {
+      return new Promise((resolve, reject) => {
+        db.get('SELECT MAX(id) as id FROM patient', (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        });
+      });
+  }
 }
 
 module.exports = new PatientService(); // Export a single instance

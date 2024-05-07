@@ -6,41 +6,26 @@ contract DoctorAppointment {
 
     // Structure to represent a doctor
     struct Doctor {
-        uint id;
         string name;
         string specialty;
         address walletAddress; // Ethereum address of the doctor
-        mapping(string => bool) availability; // Mapping for available slots
+        mapping(string => address) availability; // Mapping for available slots
     }
 
     // Structure to represent a patient
     struct Patient {
-        uint id;
         string name;
         address walletAddress; // Ethereum address of the patient
     }
 
     // Array to store doctors
-    Doctor[] public doctors;
+    mapping(uint => Doctor) public doctors;
+    mapping(uint => Patient) public patients;
 
-    mapping(string => uint) doctorIdsByAddress;
-
-    // Utility: Function to get doctor ID by wallet address
-    function getDoctorIdByWallet(string memory _walletAddress) public view returns (uint) {
-        return doctorIdsByAddress[_walletAddress];
-    }
-
-    // Convert address to string
-    function addressToString(address _address) internal pure returns (string memory) {
-        bytes memory addressBytes = abi.encodePacked(_address);
-        return string(addressBytes);
-    }
-
-    // Array to store patients
-    Patient[] public patients;
-
+    uint doctorCount;
+    uint patientCount;
     // Event for appointment booking
-    event AppointmentBooked(uint indexed doctorId, uint indexed patientId, string timestamp);
+    event AppointmentBooked(uint indexed doctorId, string timestamp);
     event DoctorRegistered(uint id, string name, string speciality);
     event PatientRergistered(uint id, string name);
 
@@ -56,27 +41,26 @@ contract DoctorAppointment {
     }
 
     // Function to register a new doctor (only admin)
-    function registerDoctor(string memory _name, string memory _specialty, address account) public onlyAdmin {
-        // Add the doctor to the array of doctors
-        doctors.push(Doctor(doctors.length, _name, _specialty, account));
-        doctorIdsByAddress[addressToString(account)] = doctors.length;
-        emit DoctorRegistered(doctors.length, _name, _specialty);
+    function registerDoctor(uint id, string memory _name, string memory _specialty, address account) public onlyAdmin {
+        // Add the doctor to the mapping of doctors
+        doctors[id] = Doctor(_name, _specialty, account);
+        doctorCount++;
+        emit DoctorRegistered(id, _name, _specialty);
     }
 
     // Function to register a new patient
-    function registerPatient(string memory _name) public {
+    function registerPatient(uint id, string memory _name) public {
         // Ensure the sender is not already registered as a patient
-        require(!isPatient(msg.sender), "Already registered as a patient");
-
-        // Add the patient to the array of patients
-        patients.push(Patient(patients.length, _name, msg.sender));
-        emit PatientRergistered(patients.length, _name);
+        require(!isPatient(), "Already registered as a patient");
+        patients[id] = Patient(_name, msg.sender);
+        patientCount++;
+        emit PatientRergistered(id , _name);
     }
 
     // Function to check if an address is registered as a patient
-    function isPatient(address _walletAddress) public view returns (bool) {
-        for (uint i = 0; i < patients.length; i++) {
-            if (patients[i].walletAddress == _walletAddress) {
+    function isPatient() public view returns (bool) {
+        for (uint i = 0; i < patientCount; i++) {
+            if (patients[i].walletAddress == msg.sender) {
                 return true;
             }
         }
@@ -93,31 +77,23 @@ contract DoctorAppointment {
     // }
 
     // Function for patients to book an appointment
-    function bookAppointment(string memory docAddress, string memory _timestamp) public {
-        // Ensure the doctor exists
-        uint _doctorId = doctorIdsByAddress[docAddress];
-        require(_doctorId != 0, "No doctor exists at the provided wallet address");
+    function bookAppointment(uint docId, string memory _timestamp) public {
+        // Ensure the doctor exists - line always gives Metamask a problem
+        // require(doctors[docId].walletAddress != address(0), "No doctor exists at the provided wallet address");
         
         // Ensure the slot is available
-        require(doctors[_doctorId].availability[_timestamp], "Slot not available");
+        require(doctors[docId].availability[_timestamp] == address(0), "Slot not available");
 
         // Emit an event indicating the booking
-        emit AppointmentBooked(_doctorId, patients.length - 1, _timestamp);
+        emit AppointmentBooked(docId, _timestamp);
 
         // Mark the slot as unavailable after booking
-        doctors[_doctorId].availability[_timestamp] = false;
+        doctors[docId].availability[_timestamp] = msg.sender;
     }
 
     // List all registered Doctors ----------------------
     // Function to get the total number of doctors
     function getDoctorsCount() public view returns (uint) {
-        return doctors.length;
-    }
-
-    // Function to get doctor details by ID
-    function getDoctor(uint _id) public view returns (uint, string memory, string memory, address) {
-        require(_id < doctors.length, "Doctor does not exist");
-        Doctor memory doctor = doctors[_id];
-        return (doctor.id, doctor.name, doctor.specialty, doctor.walletAddress);
+        return doctorCount;
     }
 }

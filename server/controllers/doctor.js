@@ -55,3 +55,12 @@ exports.deleteDoctor = async (req, res) => {
     res.status(500).json({ message: 'Error deleting doctor' });
   }
 };
+
+exports.maxIdFinder = async (req, res) => {
+  try {
+    const result = await DoctorService.maxIdFinder();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting doctor'});
+  }
+};

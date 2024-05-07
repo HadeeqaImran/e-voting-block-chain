@@ -46,10 +46,10 @@
         // Get query parameters from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const account = urlParams.get('account');
+        const id = urlParams.get('id');
         const name = urlParams.get('name');
         const specialty = urlParams.get('specialty');
         const pid = urlParams.get('pid');
-
         // Display query parameter values in the HTML elements
         document.getElementById('account').textContent = account;
         document.getElementById('name').textContent = name;
@@ -66,7 +66,7 @@
                     <td>${slot.date}</td>
                     <td>${slot.startTime}</td>
                     <td>
-                        <button class="center-btn" onclick="App.bookAppointment(${slot.date}, '${slot.startTime}', ${account})">Book Slot</button>
+                        <button class="center-btn" onclick="App.bookAppointment(${slot.date}, '${slot.startTime}', ${id})">Book Slot</button>
                     </td>
                 `;
                 if (slot.booked) {
@@ -76,7 +76,6 @@
             });
         }
 
-        const id = urlParams.get('id');
         fetch(`http://127.0.0.1:8000/api/appointments/available/${id}`)
             .then(response => response.json())
             .then(slots => {

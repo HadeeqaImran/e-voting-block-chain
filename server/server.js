@@ -16,7 +16,8 @@ app.use(cors()); // Enable CORS for all routes
 
 // API endpoints for doctors
 app.get('/api/doctors', doctorController.getDoctors);
-app.get('/api/doctors/:wallet_address', doctorController.getDoctorByWallet)
+app.get('/api/doctors/:wallet_address', doctorController.getDoctorByWallet);
+app.get('/api/doctor', doctorController.maxIdFinder);
 app.post('/api/doctors', doctorController.addDoctor);
 app.put('/api/doctors/:id', doctorController.updateDoctor); // Assuming ID is in URL path
 app.delete('/api/doctors/:id', doctorController.deleteDoctor); // Assuming ID is in URL path
@@ -24,7 +25,8 @@ app.delete('/api/doctors/:id', doctorController.deleteDoctor); // Assuming ID is
 
 // API endpoints for patients
 app.get('/api/patients', patientController.getPatients);
-app.get('/api/patients/:wallet_address', patientController.getPatientByWallet)
+app.get('/api/patients/:wallet_address', patientController.getPatientByWallet);
+app.get('/api/patient', patientController.maxIdFinder);
 app.post('/api/patients', patientController.addPatient);
 app.put('/api/patients/:id', patientController.updatePatient); // Assuming ID is in URL path
 app.delete('/api/patients/:id', patientController.deletePatient); // Assuming ID is in URL path
@@ -34,7 +36,6 @@ app.delete('/api/patients/:id', patientController.deletePatient); // Assuming ID
 app.get('/api/appointments', appointmentController.getAppointments);
 app.get('/api/appointments/:id', appointmentController.getAppointmentsByID);
 app.get('/api/appointments/available/:doctorid', appointmentController.getAvailableAppointmentsByDoctorID);
-// app.get('/api/appointments/booked/:doctorId', appointmentController.getBookedAppointments);
 app.post('/api/appointments', appointmentController.addAppointment);
 app.patch('/api/appointments/:id', appointmentController.updateAppointmentWithPatientID)
 app.put('/api/appointments/:id', appointmentController.updateAppointment); // Assuming ID is in URL path
