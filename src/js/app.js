@@ -146,7 +146,7 @@ App = {
     var name = $('#name').val();
     var age = $('#age').val();
     var gender = $('#gender').val()
-    fetch('http://localhost:8000/api/doctor')
+    fetch('http://localhost:8000/api/patient')
     .then(response => response.json())
     .then(result => {
         maxId = result.id;

@@ -51,16 +51,27 @@ contract DoctorAppointment {
     // Function to register a new patient
     function registerPatient(uint id, string memory _name) public {
         // Ensure the sender is not already registered as a patient
-        require(!isPatient(), "Already registered as a patient");
+        require(!isPatient(msg.sender), "Already registered as a patient");
         patients[id] = Patient(_name, msg.sender);
         patientCount++;
         emit PatientRergistered(id , _name);
     }
 
+    // Utility for checks
+    function toLowerCase(string memory _str) public pure returns (string memory) {
+        for (uint i = 0; i < _str.length; i++) {
+            // Convert uppercase ASCII characters to lowercase by adding 32
+            if (_str[i] >= 'A' && _str[i] <= 90) {
+                _str[i] = bytes1(uint8(_str[i]) + 32);
+            }
+        }
+        return _str;
+    }
+
     // Function to check if an address is registered as a patient
-    function isPatient() public view returns (bool) {
+    function isPatient(address current) public view returns (bool) {
         for (uint i = 0; i < patientCount; i++) {
-            if (patients[i].walletAddress == msg.sender) {
+            if (patients[i].walletAddress == current) {
                 return true;
             }
         }
