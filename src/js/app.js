@@ -89,7 +89,7 @@ App = {
     var specialty = $('#specialty').val();
     var wallet_address = $('#wallet_address').val();
     App.contracts.DoctorAppointment.deployed().then(function(instance) {
-      return instance.registerDoctor(name, specialty, { from: App.account });
+      return instance.registerDoctor(name, specialty, wallet_address, { from: App.account });
     }).then(function(result) {
       // Send a request to the backend API to store the doctor in the database
       var response = $.ajax({
@@ -170,31 +170,43 @@ App = {
   ----------------------------------------------- Patient ------------------------------------------
   --------------------------------------------------------------------------------------------------*/
 
-    bookAppointment: async function(slotId, pid) {
+  bookAppointment: async function(date, time, docAccount) {
       App.contracts.DoctorAppointment.deployed().then(function(instance) {
-        return instance.bookAppointment(name, { from: App.account });
-      }).then(function(result) {
+        const dateTimeString = date + " " + time;
+        alert(docAccount)
+        return instance.bookAppointment(docAccount, dateTimeString, { from: App.account });
+      }).then(async function(result) {
         alert("Sending request: " + result)
-        // Send a request to the backend API to store the doctor in the database
-        var response = $.ajax({
-          type: "POST",
-          url: "http://127.0.0.1:8000/api/patients",
-          contentType: "application/json",
-          data: JSON.stringify({
-              name: name,
-              age: age,
-              gender: gender,
-              wallet_address: App.account.toLowerCase(),
-              medicalHistory: "None"
-          })
-        });
+        try {
+          // Get appointment ID from URL parameters
+          const appointmentId = new URLSearchParams(window.location.search).get('id');
+  
+          // Make PATCH request to update appointment with patient ID
+          const response = await fetch(`http://127.0.0.1:8000/api/appointments/${appointmentId}`, {
+              method: 'PATCH',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  patientID: App.account.toLowerCase() // Assuming App.account is the patient's ID
+              })
+          });
+  
+          if (!response.ok) {
+              throw new Error('Failed to update appointment');
+          }
+  
+          const result = await response.json();
+          console.log('Appointment updated:', result);
+          } catch (error) {
+              console.error('Error updating appointment:', error);
+              alert('Error updating appointment:', error.message);
+          }
       }).catch(function(err) {
-        alert("Error: " + err.data)
+        alert("Error: " + err)
       });
     },
   
-  
-    }
 /* --------------------------------------------------------------------------------------------------
   ------------------------------------------------ Events -------------------------------------------
   ---------------------------------------------------------------------------------------------------*/
@@ -230,4 +242,4 @@ $(function() {
   $(window).load(function() {
     App.init();
   });
-});
+})

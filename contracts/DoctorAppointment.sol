@@ -23,6 +23,19 @@ contract DoctorAppointment {
     // Array to store doctors
     Doctor[] public doctors;
 
+    mapping(string => uint) doctorIdsByAddress;
+
+    // Utility: Function to get doctor ID by wallet address
+    function getDoctorIdByWallet(string memory _walletAddress) public view returns (uint) {
+        return doctorIdsByAddress[_walletAddress];
+    }
+
+    // Convert address to string
+    function addressToString(address _address) internal pure returns (string memory) {
+        bytes memory addressBytes = abi.encodePacked(_address);
+        return string(addressBytes);
+    }
+
     // Array to store patients
     Patient[] public patients;
 
@@ -43,9 +56,10 @@ contract DoctorAppointment {
     }
 
     // Function to register a new doctor (only admin)
-    function registerDoctor(string memory _name, string memory _specialty) public onlyAdmin {
+    function registerDoctor(string memory _name, string memory _specialty, address account) public onlyAdmin {
         // Add the doctor to the array of doctors
-        doctors.push(Doctor(doctors.length, _name, _specialty, msg.sender));
+        doctors.push(Doctor(doctors.length, _name, _specialty, account));
+        doctorIdsByAddress[addressToString(account)] = doctors.length;
         emit DoctorRegistered(doctors.length, _name, _specialty);
     }
 
@@ -79,10 +93,11 @@ contract DoctorAppointment {
     // }
 
     // Function for patients to book an appointment
-    function bookAppointment(uint _doctorId, string memory _timestamp) public {
+    function bookAppointment(string memory docAddress, string memory _timestamp) public {
         // Ensure the doctor exists
-        require(_doctorId < doctors.length, "Doctor does not exist");
-
+        uint _doctorId = doctorIdsByAddress[docAddress];
+        require(_doctorId != 0, "No doctor exists at the provided wallet address");
+        
         // Ensure the slot is available
         require(doctors[_doctorId].availability[_timestamp], "Slot not available");
 

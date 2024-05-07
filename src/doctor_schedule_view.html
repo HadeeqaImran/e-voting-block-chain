@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Profile</title>
     <link href="./css/profiles.css" rel="stylesheet"/>
-    <link href="./css/schedule.css" rel="stylesheet"/>
     <link href="./css/tables.css" rel="stylesheet"/>
 </head>
 <body>
@@ -34,11 +33,20 @@
     </tbody>
 </table>
 
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
     <script>
         // Get query parameters from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const account = urlParams.get('account');
-        const name = urlParams.get('name'); // Updated to 'name' instead of 'doctorname'
+        const name = urlParams.get('name');
         const specialty = urlParams.get('specialty');
         const pid = urlParams.get('pid');
 
@@ -46,20 +54,24 @@
         document.getElementById('account').textContent = account;
         document.getElementById('name').textContent = name;
         document.getElementById('specialty').textContent = specialty;
-        
 
         // Function to display available appointment slots
         function displayAppointmentSlots(slots) {
             const appointmentSlots = document.getElementById('appointmentSlots').getElementsByTagName('tbody')[0];
             appointmentSlots.innerHTML = '';
-
+            const account = urlParams.get('account');
             slots.forEach(slot => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${slot.date}</td>
                     <td>${slot.startTime}</td>
-                    <td><button class="center-btn" onclick="onSubmit="App.bookAppointment(slot.id, pid); return false;bookSlot(${slot.id})">Book Slot</button></td>
+                    <td>
+                        <button class="center-btn" onclick="App.bookAppointment(${slot.date}, '${slot.startTime}', ${account})">Book Slot</button>
+                    </td>
                 `;
+                if (slot.booked) {
+                    row.classList.add('disabled-row');
+                }
                 appointmentSlots.appendChild(row);
             });
         }
@@ -75,14 +87,7 @@
                 console.error('Error fetching appointment slots:', error);
                 alert('Error fetching appointment slots:', error);
         });
-        </script>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/web3.min.js"></script>
-    <script src="js/truffle-contract.js"></script>
-    <script src="js/app.js"></script>
+    </script>
 </body>
 </html>
