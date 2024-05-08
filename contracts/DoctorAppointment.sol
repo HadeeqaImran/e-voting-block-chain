@@ -57,17 +57,6 @@ contract DoctorAppointment {
         emit PatientRergistered(id , _name);
     }
 
-    // Utility for checks
-    function toLowerCase(string memory _str) public pure returns (string memory) {
-        for (uint i = 0; i < _str.length; i++) {
-            // Convert uppercase ASCII characters to lowercase by adding 32
-            if (_str[i] >= 'A' && _str[i] <= 90) {
-                _str[i] = bytes1(uint8(_str[i]) + 32);
-            }
-        }
-        return _str;
-    }
-
     // Function to check if an address is registered as a patient
     function isPatient(address current) public view returns (bool) {
         for (uint i = 0; i < patientCount; i++) {
@@ -90,7 +79,7 @@ contract DoctorAppointment {
     // Function for patients to book an appointment
     function bookAppointment(uint docId, string memory _timestamp) public {
         // Ensure the doctor exists - line always gives Metamask a problem
-        // require(doctors[docId].walletAddress != address(0), "No doctor exists at the provided wallet address");
+        require(docId <= doctorCount, "No doctor exists at the provided wallet address");
         
         // Ensure the slot is available
         require(doctors[docId].availability[_timestamp] == address(0), "Slot not available");

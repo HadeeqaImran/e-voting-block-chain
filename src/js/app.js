@@ -182,16 +182,15 @@ App = {
   bookAppointment: async function(date, time, id) {
       App.contracts.DoctorAppointment.deployed().then(function(instance) {
         const dateTimeString = date + " " + time;
-        alert (dateTimeString + id)
-        return instance.bookAppointment(id, dateTimeString, { from: App.account });
+        alert(id)
+        // Get appointment ID from URL parameters
+        const docId = new URLSearchParams(window.location.search).get('id');
+        return instance.bookAppointment(1, dateTimeString, { from: App.account });
       }).then(async function(result) {
         alert("Sending request: " + result)
         try {
-          // Get appointment ID from URL parameters
-          const appointmentId = new URLSearchParams(window.location.search).get('id');
-  
           // Make PATCH request to update appointment with patient ID
-          const response = await fetch(`http://127.0.0.1:8000/api/appointments/${appointmentId}`, {
+          const response = await fetch(`http://127.0.0.1:8000/api/appointments/${id}`, {
               method: 'PATCH',
               headers: {
                   'Content-Type': 'application/json'

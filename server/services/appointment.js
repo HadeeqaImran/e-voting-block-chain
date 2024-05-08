@@ -15,7 +15,7 @@ class AppointmentService {
 
   async getAvailableAppointmentsByDoctorID(doctorId) {
     return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM appointment WHERE doctorID = ?', [doctorId], (err, rows) => {
+      db.all('SELECT * FROM appointment WHERE doctorID = ? and patientID = -1', [doctorId], (err, rows) => {
           if (err) {
               reject(err);
           } else {
